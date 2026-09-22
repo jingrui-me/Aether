@@ -1,0 +1,26 @@
+[
+  {
+    "name": "cafe",
+    "split": "train",
+    "sha256": "2e97e963948365b95007a976dbf26e8f15a6e10bb56761a3d79eddc23c2f14ab",
+    "description": "Cozy Café, bar counter, dining tables and chairs",
+    "scene_type": "indoor",
+    "note": "Image only; use shared Aether forward-right raymap, not native WorldScore camera path.",
+    "revision": "42c4e267e1cc0529af1b0284ce018e04d43906e3",
+    "row": 0,
+    "dataset": "Howieeeee/WorldScore",
+    "config": "static"
+  },
+  {
+    "name": "waterfall",
+    "split": "train",
+    "sha256": "ddd5d706763b162b8c0c00969175bdd530a3efd61633cb2e2c358419d03513b6",
+    "description": "Waterfall at Sunset, waterfall, grassy landscape",
+    "scene_type": "outdoor",
+    "note": "Image only; use shared Aether forward-right raymap, not native WorldScore camera path.",
+    "revision": "42c4e267e1cc0529af1b0284ce018e04d43906e3",
+    "row": 500,
+    "dataset": "Howieeeee/WorldScore",
+    "config": "static"
+  }
+]

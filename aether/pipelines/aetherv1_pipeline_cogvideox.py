@@ -1,5 +1,7 @@
 import inspect
 import math
+import os
+import time
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -708,6 +710,7 @@ class AetherV1PipelineCogVideoX(CogVideoXImageToVideoPipeline):
         return_dict: bool = True,
         attention_kwargs: Optional[Dict] = None,
         fps: Optional[int] = None,
+        output_dir: Optional[str] = None,
     ) -> Union[AetherV1PipelineOutput, Tuple]:
         if task is None:
             if video is not None:
@@ -816,6 +819,10 @@ class AetherV1PipelineCogVideoX(CogVideoXImageToVideoPipeline):
             else latents.new_full((1,), fill_value=2.0)
         )
 
+        # Record denoising time using perf_counter
+        # This measures only the DIT denoising process, not VAE encoding/decoding
+        denoising_start_time = time.perf_counter()
+
         # 8. Denoising loop
         num_warmup_steps = max(
             len(timesteps) - num_inference_steps * self.scheduler.order, 0
@@ -827,6 +834,10 @@ class AetherV1PipelineCogVideoX(CogVideoXImageToVideoPipeline):
             for i, t in enumerate(timesteps):
                 if self.interrupt:
                     continue
+
+                # Print denoising step information
+                timestep_value = t.item() if isinstance(t, torch.Tensor) else t
+                print(f"[Denoising Step {i+1}/{len(timesteps)}] timestep={timestep_value}", flush=True)
 
                 self._current_timestep = t
                 latent_model_input = (
@@ -919,6 +930,21 @@ class AetherV1PipelineCogVideoX(CogVideoXImageToVideoPipeline):
                     (i + 1) > num_warmup_steps and (i + 1) % self.scheduler.order == 0
                 ):
                     progress_bar.update()
+
+        # Record denoising end time and calculate duration
+        denoising_end_time = time.perf_counter()
+        denoising_time = denoising_end_time - denoising_start_time
+        self.denoising_time = denoising_time
+
+        # Save denoising_time.txt if output_dir is provided
+        if output_dir is not None:
+            os.makedirs(output_dir, exist_ok=True)
+            denoising_time_file = os.path.join(output_dir, 'denoising_time.txt')
+            try:
+                with open(denoising_time_file, 'w') as f:
+                    f.write(f"{denoising_time:.4f}\n")
+            except Exception as e:
+                print(f"Warning: Failed to write denoising_time.txt to {denoising_time_file}: {e}")
 
         self._current_timestep = None
 

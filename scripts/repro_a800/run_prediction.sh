@@ -18,4 +18,4 @@ exec "$WC_ROOT/envs/aether/bin/python" scripts/demo.py \
   --aether_pretrained_model_name_or_path "$WC_ROOT/models/AetherV1" \
   --seed 42 --height 480 --width 720 --num_frames 41 \
   --num_inference_steps 50 \
-  --output_dir "$WC_ROOT/outputs/aether_car_seed42"
+  --output_dir "$WC_ROOT/outputs/aether_worldcache_car_seed42"

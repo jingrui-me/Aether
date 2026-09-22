@@ -145,3 +145,4 @@ websockets==15.0.1
 xxhash==4.0.1
 yourdfpy==0.0.60
 zipp==4.1.0
+loguru==0.7.3

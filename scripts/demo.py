@@ -229,6 +229,10 @@ def build_pipeline(args: argparse.Namespace) -> AetherV1PipelineCogVideoX:
     pipeline.vae.enable_slicing()
     pipeline.vae.enable_tiling()
     pipeline.to(device)
+    from aether.worldcache_aether.forwards.apply_worldcache_aether_pipeline import apply_worldcache_aether_pipeline
+    from aether.worldcache_aether.forwards.apply_worldcache_aether_forward import apply_worldcache_aether_forward
+    apply_worldcache_aether_pipeline(pipeline)
+    apply_worldcache_aether_forward(pipeline.transformer)
     return pipeline
 
 
